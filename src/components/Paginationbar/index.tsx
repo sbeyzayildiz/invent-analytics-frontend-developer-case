@@ -19,7 +19,7 @@ export const Paginationbar: React.FC<Paginationbar> = ({
       count={Math.floor(count/10)}
       shape="rounded"
       page={page}
-      onChange={(e, value) => setPage(value)}
+      onChange={(_, value) => setPage(value)}
       color="primary"
     />
   );

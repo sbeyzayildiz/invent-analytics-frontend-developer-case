@@ -3,18 +3,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { fetchMovieDetailByImdbID } from "../../store/reducers/moviesReducer";
 import styles from "./style.module.scss";
-import {
-  Chip,
-  CircularProgress,
-  IconButton,
-} from "@mui/material";
+import { Chip, CircularProgress, IconButton } from "@mui/material";
 import { Star, ArrowBack } from "@mui/icons-material";
 
 export const Movie = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { loading, error, movieByImdbID } = useAppSelector((s) => s.movies);
+  const { loading, movieByImdbID } = useAppSelector((s) => s.movies);
   useEffect(() => {
     if (!id) {
       return;
@@ -24,7 +20,11 @@ export const Movie = () => {
 
   return (
     <>
-      {loading && <div className={styles.loader}><CircularProgress size="3rem" /></div>}
+      {loading && (
+        <div className={styles.loader}>
+          <CircularProgress size="3rem" />
+        </div>
+      )}
       {movieByImdbID && (
         <div className={styles.container}>
           <IconButton

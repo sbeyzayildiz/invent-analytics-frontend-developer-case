@@ -1,4 +1,3 @@
-import React from 'react'
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import styles from './style.module.scss'
 export const NotFound = () => {
