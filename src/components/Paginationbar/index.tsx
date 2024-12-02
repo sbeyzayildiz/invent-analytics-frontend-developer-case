@@ -1,22 +1,26 @@
-import React, { useState } from 'react'
-import { Pagination } from '@mui/material'
-import styles from './style.module.scss';
+import React from "react";
+import { Pagination } from "@mui/material";
+import styles from "./style.module.scss";
 
 interface Paginationbar {
-    onChangePage: (value:number) => void;
+  setPage: (value: number) => void;
+  page: number;
+  count: number;
 }
 
-export const Paginationbar: React.FC<Paginationbar> = ({onChangePage}) => {
-    const [page, setPage] = useState(1);
-
-    const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
-        setPage(value)
-        onChangePage(value)
-    }
-
-    return (
-        <Pagination className={styles.paginationContainer} count={10} shape="rounded" page={page} onChange={handleChangePage} color='primary' />
-
-    )
-}
-
+export const Paginationbar: React.FC<Paginationbar> = ({
+  setPage,
+  page,
+  count,
+}) => {
+  return (
+    <Pagination
+      className={styles.paginationContainer}
+      count={Math.floor(count/10)}
+      shape="rounded"
+      page={page}
+      onChange={(e, value) => setPage(value)}
+      color="primary"
+    />
+  );
+};

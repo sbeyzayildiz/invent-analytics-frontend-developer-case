@@ -1,60 +1,52 @@
-import { Box, FormControl, MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material'
-import React, { useState } from 'react'
-import styles from './style.module.scss';
-
-interface Types {
-    title: string,
-    value: string
-}
+import { Box, FormControl, MenuItem, Select, TextField } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import styles from "./style.module.scss";
 
 interface Searchbar {
-    onSearch: (value: string) => void;
-    onSelectedType: (value: string) => void;
+  setSearchKey: (value: string) => void;
+  setType: (value: string) => void;
+  type: string;
+  searchKey: string;
 }
 
-export const Searchbar: React.FC<Searchbar> = ({ onSearch, onSelectedType }) => {
-    const movieTypeList: Types[] = [
-        { title: 'All', value: 'all' },
-        { title: 'Movie', value: 'movie' },
-        { title: 'TV Series', value: 'series' },
-        { title: 'TV Series Episode', value: 'episode' },
-    ];
+export const Searchbar: React.FC<Searchbar> = ({
+  setSearchKey,
+  setType,
+  searchKey,
+  type,
+}) => {
+  const [tmpSearchValue, setTmpSearchValue] = useState(searchKey);
 
-    const [selectedMovieType, setSelectedMovieType] = useState<Types>({ title: 'All', value: 'all' });
+  useEffect(() => {
+    const id = setTimeout(() => {
+      setSearchKey(tmpSearchValue);
+    }, 500);
 
-    const [searchValue, setSearchValue] = useState('');
+    return () => {
+      clearTimeout(id);
+    };
+  }, [tmpSearchValue]);
 
-    const handleChangeMovieType = (event: SelectChangeEvent) => {
-        const selectedMovieType = event.target.value as string;
-        const foundIndexMovieType = movieTypeList.findIndex(mt => mt.value === selectedMovieType);
-
-        if (foundIndexMovieType === -1) {
-            return;
-        }
-        setSelectedMovieType(movieTypeList[foundIndexMovieType]);
-        onSelectedType(selectedMovieType)
-
-    }
-
-    const handleInputSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const searchValue = event.target.value as string;
-        setSearchValue(searchValue);
-
-        if (searchValue && searchValue.length > 2) {
-            setTimeout(() => {
-                onSearch(searchValue);
-            }, 100);
-        }
-    }
-
-    return (
-        <Box className={styles.container}>
-            <TextField className={styles.searchbar} value={searchValue} onInput={handleInputSearch} placeholder='Search...' />
-            <FormControl >
-                <Select className={styles.typeSelect} value={selectedMovieType.value} onChange={handleChangeMovieType}>
-                    {movieTypeList.map((movieType, index) => <MenuItem key={index} value={movieType.value}>{movieType.title}</MenuItem>)}
-                </Select>
-            </FormControl>
-        </Box>
-    )
-}
+  return (
+    <Box className={styles.container}>
+      <TextField
+        className={styles.searchbar}
+        value={tmpSearchValue}
+        onChange={(e) => setTmpSearchValue(e.target.value)}
+        placeholder="Search..."
+      />
+      <FormControl>
+        <Select
+          className={styles.typeSelect}
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+        >
+          <MenuItem value="all">All</MenuItem>
+          <MenuItem value="movie">Movie</MenuItem>
+          <MenuItem value="series">TV Series</MenuItem>
+          <MenuItem value="episode">TV Series Episode</MenuItem>
+        </Select>
+      </FormControl>
+    </Box>
+  );
+};
